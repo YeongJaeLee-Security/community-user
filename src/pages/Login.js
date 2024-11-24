@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import UserAuth from '@/components/UserAuth';
+import { useAuth } from '@/context/AuthContext';
 
 const AuthForm = () => {
   const router = useRouter();
