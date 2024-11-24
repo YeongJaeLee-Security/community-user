@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
@@ -26,7 +26,7 @@ const UserAuth = () => {
   };
 
   const handleLogIn = () => {
-    router.push('/Login'); // 로그인 페이지로 이동
+    router.push('/login'); // 로그인 페이지로 이동
   };
 
   return (

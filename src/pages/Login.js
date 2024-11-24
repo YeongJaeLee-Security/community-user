@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../context/AuthContext';
+import UserAuth from '@/components/UserAuth';
 
 const AuthForm = () => {
   const router = useRouter();
@@ -11,33 +11,9 @@ const AuthForm = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState(''); // 회원가입에서 사용
   const [error, setError] = useState('');
-  const [passwordValid, setPasswordValid] = useState({
-    length: false,
-    uppercase: false,
-    lowercase: false,
-    number: false,
-    specialChar: false,
-  });
+ 
 
- // 비밀번호 조건 검사
- const validatePassword = (password) => {
-  const lengthValid = password.length >= 8;
-  const uppercaseValid = /[A-Z]/.test(password);
-  const lowercaseValid = /[a-z]/.test(password);
-  const numberValid = /[0-9]/.test(password);
-  const specialCharValid = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-  setPasswordValid({
-    length: lengthValid,
-    uppercase: uppercaseValid,
-    lowercase: lowercaseValid,
-    number: numberValid,
-    specialChar: specialCharValid,
-  });
-
-  return lengthValid && uppercaseValid && lowercaseValid && numberValid && specialCharValid;
-};
-
+  
   const toggleForm = () => {
     setError('');
     setIsLogin((prev) => !prev); // 로그인 ↔ 회원가입 토글
@@ -123,7 +99,6 @@ const AuthForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          
         </div>
         {error && <div style={{ color: 'red' }}>{error}</div>}
         <button type="submit">{isLogin ? 'Log In' : 'Sign Up'}</button>

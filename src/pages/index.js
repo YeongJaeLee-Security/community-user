@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import localFont from "next/font/local";
 import styles from "@/styles/Home.module.css";
+import UserAuth from "@/components/UserAuth";
 
 // import { loadEntrys } from "../lib/load-posts";
 
@@ -32,7 +33,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section>
-        <Announcement></Announcement>
+        <Announcement></Announcement><UserAuth/>
         <Feed posts={posts}></Feed>
       </section>
     </>
