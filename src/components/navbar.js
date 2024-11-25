@@ -1,7 +1,10 @@
 import Link from "next/link";
-import Form from "next/form";
+
+import { useAuth } from "@/context/authcontext";
 
 export default function Navbar() {
+  const {isLoggedIn, logOut} = useAuth();
+  
   return (
     <>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -16,10 +19,10 @@ export default function Navbar() {
             <span class="navbar-toggler-icon"></span>
           </button> */}
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <Form action="/search">
+            <form action="/search">
               <input name="query"></input>
               <button type="submit">Search</button>
-            </Form>
+            </form>
             {/* <form class="d-flex" role="search">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
               <button class="btn btn-outline-success" type="submit">Search</button>
@@ -32,16 +35,26 @@ export default function Navbar() {
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 User
                 </a>
-                <ul class="dropdown-menu">
+                <ul className="dropdown-menu">
                   <li>
-                    <Link
-                      className="dropdown-item"
-                      href="/settings"
-                    >Settings
+                    <Link className="dropdown-item" href="/settings">
+                      Settings
                     </Link>
                   </li>
-                  <li><hr class="dropdown-divider"></hr></li>
-                  <li><Link className="dropdown-item" href="#">Logout</Link></li>
+                  <li>
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    {isLoggedIn ? (
+                      <Link className="dropdown-item" href="/login">
+                        Logout
+                      </Link>
+                    ) : (
+                      <Link className="dropdown-item" href="/login">
+                        Login
+                      </Link>
+                    )}
+                  </li>
                 </ul>
               </li>
               <li>

@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import Layout from "../components/layout"
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider } from "@/context/authcontext";
 // export default function App({ Component, pageProps }) {
 //   return <Component {...pageProps} />;
 // }
@@ -8,11 +8,11 @@ import { AuthProvider } from "@/context/AuthContext";
 
 export default function App({ Component, pageProps }) {
   return (
-    <Layout>
     <AuthProvider>
+    <Layout>
       <Component {...pageProps}></Component>
-    </AuthProvider>
     </Layout>
+    </AuthProvider>
   );
 }
 

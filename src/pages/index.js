@@ -2,13 +2,17 @@ import Head from "next/head";
 import Image from "next/image";
 import localFont from "next/font/local";
 import styles from "@/styles/Home.module.css";
-import UserAuth from "@/components/UserAuth";
+import axios from "axios";
+import { useAuth } from "@/context/authcontext";
+import AuthButton from "@/components/authbutton";
+
 
 // import { loadEntrys } from "../lib/load-posts";
 
 import Announcement from "@/components/announcement";
 import Feed from "@/components/feed";
 import { dataPosts } from "@/models/postsdata";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,6 +27,13 @@ const geistMono = localFont({
 
 export default function Home() {
   const posts = dataPosts;
+  const { isLoggedIn } = useAuth();
+
+  
+  
+
+
+  
   // const [posts, setEntrys] = useState(postData);
   return (
     <>
@@ -33,9 +44,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section>
-        <Announcement></Announcement><UserAuth/>
-        <Feed posts={posts}></Feed>
+        <Announcement></Announcement>
+        <Feed posts={posts}></Feed>        
       </section>
+      <AuthButton/>
+    <div>
+      <h1>{isLoggedIn ? "You are logged in!" : "You are not logged in."}</h1>
+    </div>
     </>
   );
 }
