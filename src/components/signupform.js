@@ -64,7 +64,7 @@ const SignUp = () => {
         />
       </div>
       <div>
-        <label>Username:</label> 
+        <label>Username:</label>
         <input
           type="text"
           value={username}

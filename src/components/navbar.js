@@ -2,8 +2,8 @@ import Link from "next/link";
 import AuthButton from "./authbutton";
 
 export default function Navbar() {
-  
-  
+
+
   return (
     <>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">

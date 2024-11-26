@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Feed from "@/components/feed";
 
-export default function Search({ posts, query }) {
+export default function Search({ posts }) {
 
   return (
     <>
@@ -14,7 +14,6 @@ export default function Search({ posts, query }) {
       <section>
         <Feed
           posts={posts}
-          query={query}
         ></Feed>
       </section>
     </>

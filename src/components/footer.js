@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer>
-      <p>copyright sesac community</p>
+      <p>Copyright Sesac Community</p>
     </footer>
   )
 }

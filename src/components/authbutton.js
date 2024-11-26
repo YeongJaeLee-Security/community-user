@@ -20,19 +20,19 @@ const AuthButton = () => {
         logOut();  // AuthContext에서 로그아웃 상태 처리
         alert('로그아웃 되었습니다.');
         router.push('/');
-    } 
+    }
     catch (error) {
         console.error('로그아웃 오류:', error);
     }
-   
+
   };
 
   return (
     <>
       {isLoggedIn ? (
-        <button onClick={handleLogOut}>Logout</button> 
+        <button onClick={handleLogOut}>Logout</button>
       ) : (
-        <button onClick={() => router.push('/login')}>Login</button>  
+        <button onClick={() => router.push('/login')}>Login</button>
       )}
     </>
   );

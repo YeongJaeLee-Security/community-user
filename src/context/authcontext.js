@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-// 상태변수 초기화 
+// 상태변수 초기화
 const AuthContext = createContext({
   isLoggedIn: false,
   logIn: () => {},
@@ -12,7 +12,7 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  
+
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
@@ -31,10 +31,10 @@ export const AuthProvider = ({ children }) => {
         }
       }
     };
-    
+
     checkLoginStatus();
   }, []);
-  
+
   const logIn = () => setIsLoggedIn(true);
   const logOut = () => setIsLoggedIn(false);
 
