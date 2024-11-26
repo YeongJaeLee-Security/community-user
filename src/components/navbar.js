@@ -1,9 +1,8 @@
 import Link from "next/link";
-
-import { useAuth } from "@/context/authcontext";
+import AuthButton from "./authbutton";
 
 export default function Navbar() {
-  const {isLoggedIn, logOut} = useAuth();
+  
   
   return (
     <>
@@ -45,15 +44,7 @@ export default function Navbar() {
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    {isLoggedIn ? (
-                      <Link className="dropdown-item" href="/login">
-                        Logout
-                      </Link>
-                    ) : (
-                      <Link className="dropdown-item" href="/login">
-                        Login
-                      </Link>
-                    )}
+                    <AuthButton/>
                   </li>
                 </ul>
               </li>

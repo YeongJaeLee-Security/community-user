@@ -47,7 +47,7 @@ export default function Home() {
         <Announcement></Announcement>
         <Feed posts={posts}></Feed>        
       </section>
-      <AuthButton/>
+      
     <div>
       <h1>{isLoggedIn ? "You are logged in!" : "You are not logged in."}</h1>
     </div>

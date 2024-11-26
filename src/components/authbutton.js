@@ -32,7 +32,7 @@ const AuthButton = () => {
       {isLoggedIn ? (
         <button onClick={handleLogOut}>Logout</button> 
       ) : (
-        <button onClick={() => router.push('/Login')}>Login</button>  
+        <button onClick={() => router.push('/login')}>Login</button>  
       )}
     </>
   );

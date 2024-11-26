@@ -1,48 +1,7 @@
-// import React, { createContext, useState, useContext, useEffect } from 'react';
-// import axios from 'axios';
-
-// const AuthContext = createContext();
-
-// // AuthContext Provider
-// export const AuthProvider = ({ children }) => {
-//   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
-  
-//   const logIn = () => setIsLoggedIn(true);  // 로그인 처리
-//   const logOut = () => setIsLoggedIn(false); // 로그아웃 처리
-  
-//   useEffect(() => {
-
-//     // 페이지가 로드될 때 쿠키에서 로그인 상태 확인
-//     console.log("페이지 로드되어서 체크 시작함")
-//     const checkLoginStatus = async () => {
-//       try {
-//         const response = await axios.get("http://localhost:8000/loginstate", { withCredentials: true });
-//         if (response.status === 200) {
-//           setIsLoggedIn(true); // 로그인 상태로 설정
-//           console.log("check success")
-//         }
-//       } catch (error) {
-//         setIsLoggedIn(false); // 로그인되지 않은 상태
-//         console.log("체크에러", error)
-//       }
-//     };
-//     checkLoginStatus();
-    
-//   }, []);
-
-   
-//   return (
-//     <AuthContext.Provider value={{ isLoggedIn, logIn, logOut }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
-
-// // Custom hook to use AuthContext
-// export const useAuth = () => useContext(AuthContext);
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
+// 상태변수 초기화 
 const AuthContext = createContext({
   isLoggedIn: false,
   logIn: () => {},
@@ -59,9 +18,17 @@ export const AuthProvider = ({ children }) => {
       try {
         const { status } = await axios.get("http://localhost:8000/loginstate", { withCredentials: true });
         setIsLoggedIn(status === 200);
-        console.log("로그인 상태 확인 성공");
       } catch (error) {
-        console.error("로그인 상태 확인 실패:", error.message);
+        if (error.response) {
+          // This is a server-side error (status codes like 500, 404, etc.)
+          console.error("서버 에러:", error.response.status, error.response.data);
+        } else if (error.request) {
+          // This is a network error or no response from the server
+          console.error("네트워크 에러: 서버 응답이 없음");
+        } else {
+          // Something else happened during setting up the request
+          console.error("알 수 없는 에러:", error.message);
+        }
       }
     };
     
@@ -70,6 +37,7 @@ export const AuthProvider = ({ children }) => {
   
   const logIn = () => setIsLoggedIn(true);
   const logOut = () => setIsLoggedIn(false);
+
   return (
     <AuthContext.Provider value={{ isLoggedIn, logIn, logOut }}>
       {children}
