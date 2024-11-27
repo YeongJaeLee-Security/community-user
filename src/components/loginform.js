@@ -25,7 +25,6 @@ const LogIn = () => {
 
       if (response.status === 200) {
         logIn(); // 로그인 상태 업데이트
-        alert(response.access_token)
         router.push('/'); // 메인 페이지로 이동
       }
     } catch (err) {

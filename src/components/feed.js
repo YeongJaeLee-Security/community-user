@@ -1,6 +1,10 @@
-import Entry from "./entry";
+import Entry from "./entry/entry";
+import EntryHeader from "./entry/entryheader";
+import EntryContent from "./entry/entrycontent";
 
 import Link from "next/link";
+import EntryTitle from "./entry/entrytitle";
+import EntryBody from "./entry/entrybody";
 
 export default function Feed({ posts }) {
   return (
@@ -15,9 +19,16 @@ export default function Feed({ posts }) {
                   query: { pid: post.id },
                 }}
               >
-                <Entry
-                  post={post}
-                ></Entry>
+                <Entry>
+                  <EntryHeader
+                    author={post.author}
+                    date={post.date}
+                  ></EntryHeader>
+                  <EntryContent>
+                    <EntryTitle title={post.title}></EntryTitle>
+                    <EntryBody body={post.content}></EntryBody>
+                  </EntryContent>
+                </Entry>
               </Link>
             </li>
           );
