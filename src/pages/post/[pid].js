@@ -30,8 +30,6 @@ export default function Post({ post }) {
   async function enterEdit() {
     const isAuthor = post.author === await getAuthId();
     if (!isAuthor) {
-      alert(`${post.author}`);
-      alert(`${getAuthId()}`);
       alert("No Permission");
       return;
     }
