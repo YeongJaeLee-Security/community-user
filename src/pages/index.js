@@ -46,8 +46,8 @@ export default function Home({ posts }) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch("http://127.0.0.1:8000/post")
-  const posts = await res.json()
+  const res = await fetch("http://127.0.0.1:8000/post");
+  const posts = await res.json();
 
   return {
     props: {

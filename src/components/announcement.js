@@ -1,7 +1,7 @@
 export default function Announcement() {
   return (
     <>
-      <section class="announcement">
+      <section className="announcement">
       <p>Announce by admin</p>
       </section>
       <hr></hr>

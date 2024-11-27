@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Feed({ posts }) {
   return (
-    <section class="feed">
+    <section className="feed">
       <ul>
         {posts.map((post) => {
           return (
