@@ -61,12 +61,16 @@ export default function Post({ post }) {
     try {
       const response = await fetch("http://localhost:8000/report", {
         method: "POST",
-        credentials: "include",
+        headers: {
+          "Content-Type": "application/json", // 헤더 추가
+        },
+        credentials: "include", // 필요하지 않다면 제거
         body: JSON.stringify({
           user_id: post.author,
           report_content: reportContent,
         }),
       });
+      
       if (response.status === 201) {
         alert("신고 접수가 완료되었습니다.");
         setReportContent("");
