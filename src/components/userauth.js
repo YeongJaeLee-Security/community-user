@@ -4,9 +4,8 @@ import LogIn from './loginform';
 import { Box, Button } from '@mui/material';
 
 const UserAuth = () => {
-  const [isLogin, setIsLogin] = useState(true);
-
-  const toggleForm = () => setIsLogin(!isLogin);
+  const [isLoginPage, setIsLoginPage] = useState(true);
+  const togglePage = () => setIsLoginPage(!isLoginPage);
 
   return (
     <Box
@@ -25,12 +24,12 @@ const UserAuth = () => {
           flexGrow: 1, // 자식 컴포넌트의 크기를 자연스럽게 유지
         }}
       >
-        {isLogin ? <LogIn /> : <SignUp />}
+        {isLoginPage ? <LogIn /> : <SignUp setIsLoginPage={setIsLoginPage} />}
       </Box>
       
       <Button
         variant="contained"
-        onClick={toggleForm}
+        onClick={togglePage}
         fullWidth
         sx={{
           bgcolor: "#FF4500",
@@ -38,7 +37,7 @@ const UserAuth = () => {
           fontWeight: "bold",
         }}
       >
-        {isLogin ? "Create an Account" : "Already have an account? Log In"}
+        {isLoginPage ? "Create an Account" : "Already have an account? Log In"}
       </Button>
     </Box>
   );

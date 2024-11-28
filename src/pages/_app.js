@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
 const Theme = createTheme({
   palette: {
-    mode: "dark",
+    // mode: "dark",
     background: {
       default: "#1a1a1b",
       paper: "#282828",
@@ -26,13 +26,13 @@ const Theme = createTheme({
 
 export default function App({ Component, pageProps }) {
   return (
+    <AuthProvider>
     <ThemeProvider theme={Theme}>
       <CssBaseline />
-      <AuthProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </AuthProvider>
     </ThemeProvider>
+    </AuthProvider>
   );
 }

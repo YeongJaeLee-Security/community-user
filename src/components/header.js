@@ -2,6 +2,7 @@ import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box, InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
+import AuthButton from "./authbutton";
 
 export default function Header() {
   const router = useRouter();
@@ -41,17 +42,7 @@ export default function Header() {
         )}
 
         {/* 로그인 버튼 */}
-        <Button 
-          color="inherit" 
-          onClick={() => router.push("/login")}
-          sx={{
-            bgcolor: "#FF4500", 
-            "&:hover": { bgcolor: "#e03e00" }, 
-            fontWeight: "bold",
-          }}
-        >
-          Login
-        </Button>
+        <AuthButton></AuthButton>
       </Toolbar>
     </AppBar>
   );

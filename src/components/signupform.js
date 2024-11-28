@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Box, Button, Typography, TextField } from '@mui/material';
+import {Alert} from '@mui/material'
 
-const SignUp = () => {
+const SignUp = (setIsLoginPage) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -32,7 +33,7 @@ const SignUp = () => {
 
       if (response.status === 201) {
         alert('회원가입이 완료되었습니다. 로그인 화면으로 이동합니다.');
-        router.push('/');
+        setIsLoginPage(true);
       }
     }
    catch (err) {
