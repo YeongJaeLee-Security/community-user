@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { Box, Button, Typography, TextField } from '@mui/material';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -43,39 +44,59 @@ const SignUp = () => {
    }
     }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Email:</label>
-        <input
+    return (
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          maxWidth: 400,
+          mx: "auto",
+        }}
+      >
+        <Typography variant="h5" align="center" gutterBottom>
+          Sign Up
+        </Typography>
+        {error && <Alert severity="error">{error}</Alert>}
+        <TextField
+          label="Email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          fullWidth
           required
         />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
+        <TextField
+          label="Password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          fullWidth
           required
         />
-      </div>
-      <div>
-        <label>Username:</label>
-        <input
+        <TextField
+          label="Username"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          fullWidth
           required
         />
-      </div>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      <button type="submit">Sign Up</button>
-    </form>
-  );
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            bgcolor: "#FF4500",
+            "&:hover": { bgcolor: "#e03e00" },
+            fontWeight: "bold",
+          }}
+        >
+          Sign Up
+        </Button>
+      </Box>
+    );
 };
 
 export default SignUp;

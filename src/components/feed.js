@@ -1,39 +1,26 @@
-import Entry from "./entry/entry";
-import EntryHeader from "./entry/entryheader";
-import EntryContent from "./entry/entrycontent";
-
-import Link from "next/link";
-import EntryTitle from "./entry/entrytitle";
-import EntryBody from "./entry/entrybody";
+import React from 'react';
+import { Box, Card, CardContent, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
 
 export default function Feed({ posts }) {
+  const router = useRouter();
+
   return (
-    <section className="feed">
-      <ul>
-        {posts.map((post) => {
-          return (
-            <li key={post.id}>
-              <Link
-                href={{
-                  pathname: "/post/[pid]",
-                  query: { pid: post.id },
-                }}
-              >
-                <Entry>
-                  <EntryHeader
-                    author={post.author}
-                    date={post.date}
-                  ></EntryHeader>
-                  <EntryContent>
-                    <EntryTitle title={post.title}></EntryTitle>
-                    <EntryBody body={post.content}></EntryBody>
-                  </EntryContent>
-                </Entry>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
+    <Box>
+      {posts.map((post) => (
+        <Card
+          key={post.id}
+          sx={{ mb: 2, cursor: 'pointer' }}
+          onClick={() => router.push(`/post/${post.id}`)}
+        >
+          <CardContent>
+            <Typography variant="h6">{post.title}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {post.content.slice(0, 100)}... {/* 내용 일부만 표시 */}
+            </Typography>
+          </CardContent>
+        </Card>
+      ))}
+    </Box>
   );
 }
