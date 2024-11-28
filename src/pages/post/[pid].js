@@ -1,80 +1,59 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import { Box, Button, Paper, Typography, TextField } from '@mui/material';
+import { useAuth } from "@/context/authcontext";
+import { useRouter } from "next/router";
 
 export default function Post({ post }) {
   const [isEdit, setIsEdit] = useState(false);
   const [isReporting, setIsReporting] = useState(false); // 신고 상태
   const [content, setContent] = useState(post.content);
   const [reportContent, setReportContent] = useState(""); // 신고 내용
-  const [authId, setAuthId] = useState(null); // 현재 사용자 ID 상태
+  const { isLoggedIn, authId } = useAuth();
 
-  useEffect(() => {
-    async function fetchAuthId() {
-      const id = await getAuthId();
-      setAuthId(id);
-    }
-    fetchAuthId();
-  }, []); // 컴포넌트가 마운트될 때 한 번 실행
-
-  async function getAuthId() {
-    try {
-      const response = await fetch("http://localhost:8000/loginstate", {
-        credentials: "include",
-      });
-      const data = await response.json();
-      return data.user_id;
-    } catch (error) {
-      alert(error);
-    }
-    return undefined;
-  }
+  const isAuthor = post.author === authId;
+  const router = useRouter();
 
   async function enterEdit() {
-    const isAuthor = post.author === authId;
-    if (!isAuthor) {
-      alert("No Permission");
-      return;
-    }
     setIsEdit(true);
   }
 
   function cancelEdit() {
+    setContent(post.content);
     setIsEdit(false);
   }
+  const url = `http://localhost:8000/post/${post.id}`;
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  const options = {
+    headers,
+    post_id: post.id,
+  };
 
   async function editContent(e) {
     e.preventDefault();
 
-    const headers = {
-      'Content-Type': 'application/json',
-    };
     const updated = {
       ...post,
       content
     };
     delete updated.id;
 
-    const options = {
+    const response = await fetch(url, {
+      ...options,
       method: "PATCH",
-      headers,
       body: JSON.stringify(updated),
-      post_id: post.id
-    };
-    const response = await fetch(
-      `http://localhost:8000/post/${post.id}`,
-      options
-    );
+    });
     setIsEdit(false);
   }
 
   async function deletePost() {
-    const isAuthor = post.author === authId;
-    if (!isAuthor) {
-      alert("No Permission");
-      return;
-    }
-    alert("Todo: Delete Post");
+    const response = await fetch(url, {
+      ...options,
+      method: "DELETE",
+    });
+    router.push("/");
   }
 
   async function submitReport(e) {
@@ -82,9 +61,6 @@ export default function Post({ post }) {
     try {
       const response = await fetch("http://localhost:8000/report", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
         body: JSON.stringify({
           user_id: post.author,
@@ -162,7 +138,7 @@ export default function Post({ post }) {
           </Box>
         ) : (
           <Typography variant="body1">
-            {typeof post.content === 'string' ? post.content : JSON.stringify(post.content)}
+            {typeof content === 'string' ? content : JSON.stringify(content)}
           </Typography>
         )}
       </Paper>
@@ -177,7 +153,7 @@ export default function Post({ post }) {
         }}
       >
         {/* REPORT 버튼 */}
-        {authId && authId !== post.author && !isReporting && (
+        {isLoggedIn && authId !== post.author && !isReporting && (
           <Button
             variant="outlined"
             color="warning"
@@ -189,7 +165,7 @@ export default function Post({ post }) {
         )}
 
         {/* EDIT & DELETE 버튼 */}
-        {authId && authId === post.author && (
+        {isAuthor && (
           <Box
             sx={{
               display: 'flex',

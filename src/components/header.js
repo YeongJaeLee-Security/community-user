@@ -3,17 +3,19 @@ import { AppBar, Toolbar, Typography, Button, Box, InputBase } from "@mui/materi
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
 import AuthButton from "./authbutton";
+import { useAuth } from "@/context/authcontext";
 
 export default function Header() {
+  const { isLoggedIn } = useAuth();
   const router = useRouter();
 
   return (
     <AppBar position="static" sx={{ bgcolor: "#1a1a1b", color: "#FFFFFF" }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/* 홈 버튼 */}
-        <Button 
-          color="inherit" 
-          onClick={() => router.push("/")} 
+        <Button
+          color="inherit"
+          onClick={() => router.push("/")}
           sx={{ fontWeight: "bold" }}
         >
           Sesac Community
@@ -40,7 +42,12 @@ export default function Header() {
             />
           </Box>
         )}
-
+        {isLoggedIn &&
+          <Button onClick={() => router.push("/settings")}>Settings</Button>
+        }
+        {isLoggedIn &&
+          <Button onClick={() => router.push("/submit")}>Create Post</Button>
+        }
         {/* 로그인 버튼 */}
         <AuthButton></AuthButton>
       </Toolbar>
