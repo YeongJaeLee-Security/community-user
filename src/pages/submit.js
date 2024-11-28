@@ -10,43 +10,6 @@ export default function Page() {
   const [content, setContent] = useState("");
   const router = useRouter();
 
-  async function createTestPost(e) {
-    e.preventDefault();
-
-    const post = {
-      title: "Sesac Title",
-      content: "Sesac Content",
-      date: new Date(),
-      author: undefined
-    };
-
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-
-    try {
-      // const formData = new FormData(event.currentTarget);
-      const response = await fetch("http://localhost:8000/submit", {
-        method: "POST",
-        body: JSON.stringify(post),
-        headers,
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit data. Please try again");
-      }
-      alert("Test Post Submitted!");
-
-      // Handle response if necessary
-      // ...
-    } catch (error) {
-      // Handle error if necessary
-      console.error(error);
-    } finally {
-    }
-  }
-
   async function createPost(e) {
     e.preventDefault();
     const post = {
@@ -88,7 +51,6 @@ export default function Page() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <button onClick={createTestPost}>test submit</button>
       <Editor onSubmit={createPost}>
         <EditorTitle title={title} setTitle={setTitle}></EditorTitle>
         <EditorContent content={content} setContent={setContent}></EditorContent>

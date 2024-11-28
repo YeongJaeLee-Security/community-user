@@ -1,8 +1,9 @@
 import Link from "next/link";
 import AuthButton from "./authbutton";
+import { useAuth } from "@/context/authcontext";
 
 export default function Navbar() {
-
+  const { isLoggedIn } = useAuth();
 
   return (
     <>
@@ -35,11 +36,13 @@ export default function Navbar() {
                 User
                 </a>
                 <ul className="dropdown-menu">
-                  <li>
-                    <Link className="dropdown-item" href="/settings">
-                      Settings
-                    </Link>
-                  </li>
+                  {isLoggedIn &&
+                    <li>
+                      <Link className="dropdown-item" href="/settings">
+                        Settings
+                      </Link>
+                    </li>
+                  }
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
@@ -48,11 +51,13 @@ export default function Navbar() {
                   </li>
                 </ul>
               </li>
-              <li>
-                <Link href="/submit">
-                  Create Post
-                </Link>
-              </li>
+              {isLoggedIn &&
+                <li>
+                    <Link href="/submit">
+                      Create Post
+                    </Link>
+                </li>
+              }
               <li className="nav-item">
                 {/* <Link className="nav-link disabled"  */}
                 <a className="nav-link disabled" aria-disabled="true">Maybe admin</a>
