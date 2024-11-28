@@ -1,13 +1,16 @@
-import Header from "./header";
-import Main from "./main";
-import Footer from "./footer";
+import React from 'react';
+import Header from './header';
+import { Container } from '@mui/material';
+import Footer from './footer';
 
 export default function Layout({ children }) {
   return (
     <>
-      <Header></Header>
-      <Main>{children}</Main>
-      <Footer></Footer>
+      <Header />
+      <Container maxWidth="lg" sx={{ mt: 2 }}>
+        {children}
+      </Container>
+      <Footer />
     </>
-  )
+  );
 }

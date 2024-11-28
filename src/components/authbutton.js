@@ -2,6 +2,8 @@ import React from 'react';
 import { useAuth } from '../context/authcontext';  // 로그인 상태와 로그아웃 함수 가져오기
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { Button } from '@mui/material';
+
 
 const AuthButton = () => {
   const { isLoggedIn, logOut } = useAuth();  // 로그인 상태 및 로그아웃 함수
@@ -28,10 +30,25 @@ const AuthButton = () => {
 
   return (
     <>
+      
       {isLoggedIn ? (
-        <button onClick={handleLogOut}>Logout</button>
+        <Button
+        color="inherit"
+        onClick={handleLogOut}
+        sx={{ borderColor: 'warning.main', color: 'warning.main' }}
+        >Logout</Button>
+        
       ) : (
-        <button onClick={() => router.push('/login')}>Login</button>
+        <Button 
+        color="inherit"
+        onClick={() => router.push('/login')}
+        sx={{
+          bgcolor: "#FF4500", 
+          "&:hover": { bgcolor: "#e03e00" }, 
+          fontWeight: "bold",
+        }}
+
+        >Login</Button>
       )}
     </>
   );

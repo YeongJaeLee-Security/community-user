@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { Box, Button, Typography, TextField, Alert } from '@mui/material';
 
-const SignUp = ({setIsLoginPage}) => {
+const SignUp = ({ setIsLoginPage }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
+  
 
   const validatePassword = (pw) => {
     // 비밀번호 정책: 최소 8자, 대문자, 소문자, 숫자, 특수문자 포함
@@ -41,39 +41,59 @@ const SignUp = ({setIsLoginPage}) => {
     });
 }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Email:</label>
-        <input
+    return (
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          maxWidth: 400,
+          mx: "auto",
+        }}
+      >
+        <Typography variant="h5" align="center" gutterBottom>
+          Sign Up
+        </Typography>
+        {error && <Alert severity="error">{error}</Alert>}
+        <TextField
+          label="Email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          fullWidth
           required
         />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
+        <TextField
+          label="Password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          fullWidth
           required
         />
-      </div>
-      <div>
-        <label>Username:</label>
-        <input
+        <TextField
+          label="Username"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          fullWidth
           required
         />
-      </div>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      <button type="submit">Sign Up</button>
-    </form>
-  );
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            bgcolor: "#FF4500",
+            "&:hover": { bgcolor: "#e03e00" },
+            fontWeight: "bold",
+          }}
+        >
+          Sign Up
+        </Button>
+      </Box>
+    );
 };
 
 export default SignUp;

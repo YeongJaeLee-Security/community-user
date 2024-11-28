@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/authcontext';
+import { Box, Button, Typography, TextField, Alert } from '@mui/material';
+
 
 const LogIn = () => {
   const router = useRouter();
@@ -37,30 +39,49 @@ const LogIn = () => {
   };
 
   return (
-    <div>
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* 오류 메시지 표시 */}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Log In</button>
-      </form>
-    </div>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        maxWidth: 400,
+        mx: "auto",
+      }}
+    >
+      <Typography variant="h5" align="center" gutterBottom>
+        Log In
+      </Typography>
+      {error && <Alert severity="error">{error}</Alert>}
+      <TextField
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        fullWidth
+        required
+      />
+      <TextField
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        fullWidth
+        required
+      />
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{
+          bgcolor: "#FF4500",
+          "&:hover": { bgcolor: "#e03e00" },
+          fontWeight: "bold",
+        }}
+      >
+        Log In
+      </Button>
+    </Box>
   );
 };
 
