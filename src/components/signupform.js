@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { Box, Button, Typography, TextField } from '@mui/material';
+import { Box, Button, Typography, TextField, Alert } from '@mui/material';
 
 const SignUp = ({setIsLoginPage}) => {
   const [email, setEmail] = useState('');
