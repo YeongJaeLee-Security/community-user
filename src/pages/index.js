@@ -10,7 +10,7 @@ export default function Home({ posts }) {
         <title>Sesac Community</title>
       </Head>
       <Announcement />
-      <Feed posts={posts} />
+      <Feed posts={[...posts].reverse()} />
     </>
   );
 }

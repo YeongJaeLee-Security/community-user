@@ -14,7 +14,7 @@ export default function Post({ post }) {
   const isAuthor = post.author === authId;
   const router = useRouter();
 
-  async function enterEdit() {
+  function enterEdit() {
     setIsEdit(true);
   }
 
@@ -22,6 +22,7 @@ export default function Post({ post }) {
     setContent(post.content);
     setIsEdit(false);
   }
+
   const url = `http://localhost:8000/post/${post.id}`;
   const headers = {
     "Content-Type": "application/json",
@@ -61,16 +62,14 @@ export default function Post({ post }) {
     try {
       const response = await fetch("http://localhost:8000/report", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json", // 헤더 추가
-        },
+        headers,
         credentials: "include", // 필요하지 않다면 제거
         body: JSON.stringify({
           user_id: post.author,
           report_content: reportContent,
         }),
       });
-      
+
       if (response.status === 201) {
         alert("신고 접수가 완료되었습니다.");
         setReportContent("");
@@ -87,7 +86,7 @@ export default function Post({ post }) {
     <>
       <Head>
         <title>{post.title} : Community Sesac</title>
-        <meta name="description" content={`Post by ${post.author} on ${post.date}`} />
+        <meta name="description" content={`Post by ${post.user.usename} on ${post.date}`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -98,7 +97,7 @@ export default function Post({ post }) {
           {post.title}
         </Typography>
         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
-          작성자: {post.author} | 날짜: {post.date}
+          작성자: {post.user.username} | 날짜: {post.date}
         </Typography>
         {isEdit ? (
           <Box component="form" onSubmit={editContent} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -157,7 +156,7 @@ export default function Post({ post }) {
         }}
       >
         {/* REPORT 버튼 */}
-        {isLoggedIn && authId !== post.author && !isReporting && (
+        {isLoggedIn && isAuthor && !isReporting && (
           <Button
             variant="outlined"
             color="warning"
