@@ -156,7 +156,7 @@ export default function Post({ post }) {
         }}
       >
         {/* REPORT 버튼 */}
-        {isLoggedIn && isAuthor && !isReporting && (
+        {isLoggedIn && !isAuthor && !isReporting && (
           <Button
             variant="outlined"
             color="warning"
