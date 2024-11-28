@@ -4,6 +4,7 @@ import Editor from "@/components/editor/editor";
 import EditorTitle from "@/components/editor/editortitle";
 import EditorContent from "@/components/editor/editorcontent";
 import { useRouter } from "next/router";
+import { Box, TextField, Button } from "@mui/material";
 
 export default function Page() {
   const [title, setTitle] = useState("");
@@ -20,7 +21,6 @@ export default function Page() {
     };
 
     try {
-      // const formData = new FormData(event.currentTarget);
       const response = await fetch("http://localhost:8000/submit", {
         method: "POST",
         body: JSON.stringify(post),
@@ -51,10 +51,31 @@ export default function Page() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Editor onSubmit={createPost}>
-        <EditorTitle title={title} setTitle={setTitle}></EditorTitle>
-        <EditorContent content={content} setContent={setContent}></EditorContent>
-      </Editor>
+      <Box component="form" onSubmit={createPost} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <TextField
+          rows={1}
+          fullWidth
+          variant="outlined"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Edit your title..."
+          required
+        />
+        <TextField
+          multiline
+          rows={5}
+          fullWidth
+          variant="outlined"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Edit your content..."
+        />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button variant="contained" color="primary" type="submit" sx={{ bgcolor: 'primary.main' }}>
+            Submit
+          </Button>
+        </Box>
+      </Box>
     </>
   );
 }
