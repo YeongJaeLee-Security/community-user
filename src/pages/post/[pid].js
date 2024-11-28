@@ -4,7 +4,9 @@ import { Box, Button, Paper, Typography, TextField } from '@mui/material';
 
 export default function Post({ post }) {
   const [isEdit, setIsEdit] = useState(false);
+  const [isReporting, setIsReporting] = useState(false); // 신고 상태
   const [content, setContent] = useState(post.content);
+  const [reportContent, setReportContent] = useState(""); // 신고 내용
   const [authId, setAuthId] = useState(null); // 현재 사용자 ID 상태
 
   useEffect(() => {
@@ -75,6 +77,32 @@ export default function Post({ post }) {
     alert("Todo: Delete Post");
   }
 
+  async function submitReport(e) {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          user_id: post.author,
+          report_content: reportContent,
+        }),
+      });
+      if (response.status === 201) {
+        alert("신고 접수가 완료되었습니다.");
+        setReportContent("");
+        setIsReporting(false);
+      } else {
+        alert("잘못된 접근입니다.");
+      }
+    } catch (error) {
+      alert("잘못된 접근입니다.");
+    }
+  }
+
   return (
     <>
       <Head>
@@ -112,8 +140,30 @@ export default function Post({ post }) {
               </Button>
             </Box>
           </Box>
+        ) : isReporting ? (
+          <Box component="form" onSubmit={submitReport} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <TextField
+              multiline
+              rows={4}
+              fullWidth
+              variant="outlined"
+              value={reportContent}
+              onChange={(e) => setReportContent(e.target.value)}
+              placeholder="Enter report reason..."
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Button variant="contained" color="primary" type="submit" sx={{ bgcolor: 'primary.main' }}>
+                Submit Report
+              </Button>
+              <Button variant="outlined" color="secondary" onClick={() => setIsReporting(false)}>
+                Cancel
+              </Button>
+            </Box>
+          </Box>
         ) : (
-          <Typography variant="body1">{typeof post.content === 'string' ? post.content : JSON.stringify(post.content)}</Typography>
+          <Typography variant="body1">
+            {typeof post.content === 'string' ? post.content : JSON.stringify(post.content)}
+          </Typography>
         )}
       </Paper>
 
@@ -127,11 +177,12 @@ export default function Post({ post }) {
         }}
       >
         {/* REPORT 버튼 */}
-        {authId && authId !== post.author && (
+        {authId && authId !== post.author && !isReporting && (
           <Button
             variant="outlined"
             color="warning"
             sx={{ borderColor: 'warning.main', color: 'warning.main' }}
+            onClick={() => setIsReporting(true)}
           >
             Report
           </Button>
