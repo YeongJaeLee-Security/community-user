@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, Button, Typography, TextField, Alert } from '@mui/material';
 
-const SignUp = (setIsLoginPage) => {
+const SignUp = ({ setIsLoginPage }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');

@@ -35,11 +35,7 @@ const AuthButton = () => {
         <Button
         color="inherit"
         onClick={handleLogOut}
-        sx={{
-          bgcolor: "#FF4500", 
-          "&:hover": { bgcolor: "#e03e00" }, 
-          fontWeight: "bold",
-        }}
+        sx={{ borderColor: 'warning.main', color: 'warning.main' }}
         >Logout</Button>
         
       ) : (
