@@ -16,7 +16,7 @@ export default function Feed({ posts }) {
           <CardContent>
             <Typography variant="h6">{post.title}</Typography>
             <Typography variant="body2" color="text.secondary">
-              {post.content.slice(0, 100)}... {/* 내용 일부만 표시 */}
+              {post.content}
             </Typography>
           </CardContent>
         </Card>
