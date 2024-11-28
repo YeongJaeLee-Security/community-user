@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { Box, Button, Paper, Typography, TextField } from '@mui/material';
-
 
 export default function Post({ post }) {
   const [isEdit, setIsEdit] = useState(false);
   const [content, setContent] = useState(post.content);
+  const [authId, setAuthId] = useState(null); // 현재 사용자 ID 상태
+
+  useEffect(() => {
+    async function fetchAuthId() {
+      const id = await getAuthId();
+      setAuthId(id);
+    }
+    fetchAuthId();
+  }, []); // 컴포넌트가 마운트될 때 한 번 실행
 
   async function getAuthId() {
     try {
@@ -21,7 +29,7 @@ export default function Post({ post }) {
   }
 
   async function enterEdit() {
-    const isAuthor = post.author === await getAuthId();
+    const isAuthor = post.author === authId;
     if (!isAuthor) {
       alert("No Permission");
       return;
@@ -59,7 +67,7 @@ export default function Post({ post }) {
   }
 
   async function deletePost() {
-    const isAuthor = post.author === await getAuthId();
+    const isAuthor = post.author === authId;
     if (!isAuthor) {
       alert("No Permission");
       return;
@@ -105,7 +113,6 @@ export default function Post({ post }) {
             </Box>
           </Box>
         ) : (
-          // JSON.stringify로 content를 변환하여 출력
           <Typography variant="body1">{typeof post.content === 'string' ? post.content : JSON.stringify(post.content)}</Typography>
         )}
       </Paper>
@@ -120,33 +127,43 @@ export default function Post({ post }) {
         }}
       >
         {/* REPORT 버튼 */}
-        <Button
-          variant="outlined"
-          color="warning"
-          sx={{ borderColor: 'warning.main', color: 'warning.main' }}
-        >
-          Report
-        </Button>
-
-        {/* EDIT & DELETE 버튼 */}
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={enterEdit}
-            sx={{ bgcolor: 'primary.main' }}
-          >
-            Edit
-          </Button>
+        {authId && authId !== post.author && (
           <Button
             variant="outlined"
-            color="error"
-            onClick={deletePost}
-            sx={{ borderColor: 'error.main', color: 'error.main' }}
+            color="warning"
+            sx={{ borderColor: 'warning.main', color: 'warning.main' }}
           >
-            Delete
+            Report
           </Button>
-        </Box>
+        )}
+
+        {/* EDIT & DELETE 버튼 */}
+        {authId === post.author && (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 2,
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={enterEdit}
+              sx={{ bgcolor: 'primary.main' }}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={deletePost}
+              sx={{ borderColor: 'error.main', color: 'error.main' }}
+            >
+              Delete
+            </Button>
+          </Box>
+        )}
       </Box>
     </>
   );
