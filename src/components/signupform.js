@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import { Box, Button, Typography, TextField, Alert } from '@mui/material';
 
-const SignUp = () => {
+const SignUp = (setIsLoginPage) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
+  
 
   const validatePassword = (pw) => {
     // 비밀번호 정책: 최소 8자, 대문자, 소문자, 숫자, 특수문자 포함
