@@ -81,19 +81,11 @@ export default function Post({ post }) {
         <Typography variant="h4" gutterBottom>
           {post.title}
         </Typography>
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{ display: 'block', mb: 2 }}
-        >
+        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
           작성자: {post.author} | 날짜: {post.date}
         </Typography>
         {isEdit ? (
-          <Box
-            component="form"
-            onSubmit={editContent}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-          >
+          <Box component="form" onSubmit={editContent} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
               multiline
               rows={5}
@@ -104,12 +96,7 @@ export default function Post({ post }) {
               placeholder="Edit your content..."
             />
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                sx={{ bgcolor: 'primary.main' }}
-              >
+              <Button variant="contained" color="primary" type="submit" sx={{ bgcolor: 'primary.main' }}>
                 Save
               </Button>
               <Button variant="outlined" color="secondary" onClick={cancelEdit}>
@@ -118,7 +105,8 @@ export default function Post({ post }) {
             </Box>
           </Box>
         ) : (
-          <Typography variant="body1">{post.content}</Typography>
+          // JSON.stringify로 content를 변환하여 출력
+          <Typography variant="body1">{typeof post.content === 'string' ? post.content : JSON.stringify(post.content)}</Typography>
         )}
       </Paper>
 
