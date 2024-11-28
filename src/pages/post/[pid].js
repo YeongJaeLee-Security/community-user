@@ -138,7 +138,7 @@ export default function Post({ post }) {
         )}
 
         {/* EDIT & DELETE 버튼 */}
-        {authId === post.author && (
+        {authId && authId === post.author && (
           <Box
             sx={{
               display: 'flex',
