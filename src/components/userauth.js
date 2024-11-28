@@ -3,15 +3,15 @@ import SignUp from './signupform';
 import LogIn from './loginform';
 
 const UserAuth = () => {
-  const [isLogin, setIsLogin] = useState(true);
-
-  const toggleForm = () => setIsLogin(!isLogin);
+  
+  const [isLoginPage, setIsLoginPage] = useState(true);
+  const togglePage = () => setIsLoginPage(!isLoginPage);
 
   return (
     <div>
-      {isLogin ? <LogIn /> : <SignUp />}
-      <button onClick={toggleForm} style={{ marginTop: '10px' }}>
-        {isLogin ? 'Create an Account' : 'Already have an account? Log In'}
+      {isLoginPage ? <LogIn /> : <SignUp setIsLoginPage={setIsLoginPage} />}
+      <button onClick={togglePage} style={{ marginTop: '10px' }}>
+        {isLoginPage ? 'Create an Account' : 'Already have an account? Log In'}
       </button>
     </div>
   );
