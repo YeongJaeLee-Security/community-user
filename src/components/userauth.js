@@ -4,9 +4,9 @@ import LogIn from './loginform';
 import { Box, Button } from '@mui/material';
 
 const UserAuth = () => {
-  const [isLogin, setIsLogin] = useState(true);
-
-  const toggleForm = () => setIsLogin(!isLogin);
+  
+  const [isLoginPage, setIsLoginPage] = useState(true);
+  const togglePage = () => setIsLoginPage(!isLoginPage);
 
   return (
     <Box

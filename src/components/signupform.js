@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Box, Button, Typography, TextField } from '@mui/material';
 
-const SignUp = () => {
+const SignUp = ({setIsLoginPage}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -22,27 +22,25 @@ const SignUp = () => {
       setError('비밀번호는 최소 8자 이상이며, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.');
       return;
     }
-    try{
-    // 회원가입 처리
-    const response = await axios.post(
-        'http://localhost:8000/auth/signup',
-        { email, password, username },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-
+  
+    axios.post(
+      'http://localhost:8000/auth/signup',
+      { email, password, username },
+      { headers: { 'Content-Type': 'application/json' } }
+    ).then(response => {
       if (response.status === 201) {
         alert('회원가입이 완료되었습니다. 로그인 화면으로 이동합니다.');
-        router.push('/');
+        setIsLoginPage(true);
       }
-    }
-   catch (err) {
-    if (err.response && err.response.data) {
-      setError(err.response.data.detail); // 서버 에러 메시지
-    } else {
-      setError('요청 처리에 실패했습니다.');
-  };
-   }
-    }
+    })
+    .catch (err => {
+      if (err.response && err.response.data) {
+        setError(err.response.data.detail); // 서버 에러 메시지
+      } else {
+        setError('요청 처리에 실패했습니다.');
+      };
+    });
+}
 
     return (
       <Box
