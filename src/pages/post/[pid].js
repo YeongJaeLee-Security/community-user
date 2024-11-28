@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Head from "next/head";
-import Link from "next/link";
 
 import Entry from "@/components/entry/entry";
 import EntryHeader from "@/components/entry/entryheader";
@@ -9,69 +8,58 @@ import Editor from "@/components/editor/editor";
 import EditorContent from "@/components/editor/editorcontent";
 import EntryTitle from "@/components/entry/entrytitle";
 import EntryBody from "@/components/entry/entrybody";
+import { useAuth } from "@/context/authcontext";
+import { useRouter } from "next/router";
 
 export default function Post({ post }) {
+  const { authId } = useAuth();
   const [isEdit, setIsEdit] = useState(false);
   const [content, setContent] = useState(post.content);
 
-  async function getAuthId() {
-    try {
-      const response = await fetch("http://localhost:8000/loginstate", {
-        credentials: "include",
-      });
-      const data = await response.json();
-      return data.user_id;
-    } catch (error) {
-      alert(error);
-    }
-    return undefined;
-  }
+  const isAuthor = post.author === authId;
+  const router = useRouter();
 
   async function enterEdit() {
-    const isAuthor = post.author === await getAuthId();
-    if (!isAuthor) {
-      alert("No Permission");
-      return;
-    }
     setIsEdit(true);
   }
 
   function cancelEdit() {
+    setContent(post.content);
     setIsEdit(false);
+  }
+
+  const url = `http://localhost:8000/post/${post.id}`;
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  const options = {
+    headers,
+    post_id: post.id,
   }
 
   async function editContent(e) {
     e.preventDefault();
 
-    const headers = {
-      'Content-Type': 'application/json',
-    };
     const updated = {
       ...post,
       content
     };
     delete updated.id;
 
-    const options = {
+    const response = await fetch(url, {
+      ...options,
       method: "PATCH",
-      headers,
       body: JSON.stringify(updated),
-      post_id: post.id
-    };
-    const response = await fetch(
-      `http://localhost:8000/post/${post.id}`,
-      options
-    );
+    });
     setIsEdit(false);
   }
 
   async function deletePost() {
-    const isAuthor = post.author === await getAuthId();
-    if (!isAuthor) {
-      alert("No Permission");
-      return;
-    }
-    alert("Todo: Delete Post");
+    const response = await fetch(url, {
+      ...options,
+      method: "DELETE",
+    });
+    router.push("/");
   }
 
   return (
@@ -82,10 +70,12 @@ export default function Post({ post }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section>
-        <button onClick={enterEdit}>Edit</button>
-        <button onClick={deletePost}>Delete</button>
-      </section>
+      {(isAuthor) &&
+        <section>
+          <button onClick={enterEdit}>Edit</button>
+          <button onClick={deletePost}>Delete</button>
+        </section>
+      }
       <Entry>
         <EntryHeader
           author={post.author}

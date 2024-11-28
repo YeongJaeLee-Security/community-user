@@ -36,7 +36,6 @@ export default function Home({ posts }) {
       <section>
         <Announcement></Announcement>
         <Feed posts={posts}></Feed>
-        {/* <Link href="/feed">feed test</Link> */}
       </section>
       <div>
         <h1>{isLoggedIn ? "You are logged in!" : "You are not logged in."}</h1>
