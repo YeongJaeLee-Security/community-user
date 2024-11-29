@@ -18,6 +18,9 @@ export default function Feed({ posts }) {
             <Typography variant="body2" color="text.secondary">
               {post.content}
             </Typography>
+            {post.image_path && (
+              <Box component="img" sx={{width: '600px', height: '500px', objectFit: 'cover'}} src={`http://localhost:8000/${post.image_path}`}></Box>
+            )}
           </CardContent>
         </Card>
       ))}

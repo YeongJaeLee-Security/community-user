@@ -1,32 +1,46 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useCallback, useEffect } from "react";
 import Head from "next/head";
 import Editor from "@/components/editor/editor";
 import EditorTitle from "@/components/editor/editortitle";
 import EditorContent from "@/components/editor/editorcontent";
 import { useRouter } from "next/router";
-import { Box, TextField, Button } from "@mui/material";
+import { Box, TextField, Button, Typography } from "@mui/material";
+
+import { useAuth } from "@/context/authcontext";
 
 export default function Page() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [imageFile, setImageFile] = useState(null);
   const router = useRouter();
+
+  const { isLoggedIn } = useAuth();
+
+  const fetchAuth = useCallback(
+    async () => {
+      if (!isLoggedIn) {
+        router.push("/login");
+      }
+    }, [isLoggedIn, router]
+  )
+
+  useEffect(() => {
+    fetchAuth();
+  }, [fetchAuth]);
 
   async function createPost(e) {
     e.preventDefault();
-    const post = {
-      title,
-      content,
-      author: undefined,
-      date: new Date(),
+    const formData = new FormData();
+    formData.append("title", title); 
+    formData.append("content", content);
+    if (imageFile) {
+      formData.append("file", imageFile);
     };
 
     try {
       const response = await fetch("http://localhost:8000/submit", {
         method: "POST",
-        body: JSON.stringify(post),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: formData,
         credentials: "include",
       });
 
@@ -70,6 +84,13 @@ export default function Page() {
           onChange={(e) => setContent(e.target.value)}
           placeholder="Edit your content..."
         />
+        <box sx={{ display: "flex", alignItems: "center", gap: 2,}}>
+        <Button variant="contained" color="primary" component="label" sx={{ bgcolor: 'primary.main', width: "fit-content"}} >
+        Attach image
+          <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} hidden />
+        </Button>
+        {imageFile && (<Typography variant="body2" sx={{ color: "white" }}> Selected File: {imageFile.name} </Typography>)}
+        </box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button variant="contained" color="primary" type="submit" sx={{ bgcolor: 'primary.main' }}>
             Submit

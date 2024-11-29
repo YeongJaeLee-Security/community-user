@@ -4,6 +4,7 @@ import Feed from "@/components/feed";
 import { Box, Button } from "@mui/material";
 import { useAuth } from "@/context/authcontext";
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Settings() {
   const [ authState, setAuthState ] = useState(null);
@@ -14,18 +15,22 @@ export default function Settings() {
   const [isEditUsername, setIsEditUsername] = useState(false);
   const [ usernameState, setUsernameState ] = useState(null);
 
-  const { authId } = useAuth();
+  const { isLoggedIn } = useAuth();
+  const router = useRouter();
 
   const fetchAuth = useCallback(
     async () => {
+      if (!isLoggedIn) {
+        router.push("/login");
+      }
       const response = await fetch(
-        `http://localhost:8000/auth/profile/${authId}`
+        `http://localhost:8000/auth/settings`
       );
       const auth = await response.json();
       setAuthState(auth);
       setEmailState(auth.email);
       setUsernameState(auth.username);
-    }, [authId]
+    }, [isLoggedIn, router]
   )
 
   useEffect(() => {
@@ -59,7 +64,6 @@ export default function Settings() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Box>
-        {authState && <Feed posts={[...authState.posts].reverse()}></Feed>}
         <Button>Delete account</Button>
       </Box>
     </>
