@@ -30,24 +30,17 @@ export default function Page() {
 
   async function createPost(e) {
     e.preventDefault();
-
-    const post = {
-      title,
-      content,
-      author: undefined,
-      date: new Date(),
-    };
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
     if (imageFile) {
-      post["file"] = imageFile;
+      formData.append("file", imageFile);
     };
 
     try {
       const response = await fetch("http://localhost:8000/submit", {
         method: "POST",
-        body: JSON.stringify(post),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: formData,
         credentials: "include",
       });
 
@@ -80,7 +73,7 @@ export default function Page() {
           variant="outlined"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Edit your title..."
+          placeholder="Fill your title..."
           required
         />
         <TextField
@@ -90,7 +83,7 @@ export default function Page() {
           variant="outlined"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Edit your content..."
+          placeholder="Fill your content..."
         />
         <box sx={{ display: "flex", alignItems: "center", gap: 2,}}>
         <Button variant="contained" color="primary" component="label" sx={{ bgcolor: 'primary.main', width: "fit-content"}} >

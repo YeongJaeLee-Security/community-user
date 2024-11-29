@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Button, Paper, Typography, TextField } from "@mui/material";
+import { Box, Button, Paper, Typography, TextField, Link } from "@mui/material";
 import { useAuth } from "@/context/authcontext";
 import { useRouter } from "next/router";
-import Link from "next/link";
+import diffDate from "@/lib/diffdate";
 
 export default function Post({ post }) {
   const [isEdit, setIsEdit] = useState(false);
@@ -14,6 +14,7 @@ export default function Post({ post }) {
   const [removeImage, setRemoveImage] = useState(false);
   const [reportContent, setReportContent] = useState("");
   const { isLoggedIn, authId } = useAuth();
+  const [ prevContent, setPrevContent ] = useState(post.content);
   const router = useRouter();
   const isAuthor = post.author === authId;
 
@@ -22,14 +23,14 @@ export default function Post({ post }) {
   }
 
   function cancelEdit() {
-    setContent(post.content);
+    setContent(prevContent);
     setImageFile(null);
     setPrevImage(post.image_path);
     setRemoveImage(false);
     setIsEdit(false);
   }
 
-  const editContent = async (e) => {
+  const updateContent = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -55,6 +56,8 @@ export default function Post({ post }) {
       }
 
       alert("게시글이 수정되었습니다.");
+      setIsEdit(false);
+      setPrevContent(data.content);
       router.reload();
     } catch (error) {
       console.error(error);
@@ -67,10 +70,10 @@ export default function Post({ post }) {
         method: "DELETE",
         credentials: "include",
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to delete image");
-      }  
+      }
       setPrevImage(null);
       setRemoveImage(true);
       setImageFile(null);
@@ -133,14 +136,20 @@ export default function Post({ post }) {
           {post.title}
         </Typography>
         <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 2 }}>
-          <Link href={`http://localhost:3000/profile/${post.user.id}`}>
-            작성자: {post.user.username}
+          작성자:
+          <Link
+            component="button"
+            variant="body2"
+            onClick={() => router.push(`/profile/${post.user.id}`)}
+            // href={`http://localhost:3000/profile/${post.user.id}`}
+          >
+          { post.user.username}
           </Link>
           | 날짜: {post.date}
+          {diffDate(post.date)}
         </Typography>
-
         {isEdit ? (
-          <Box component="form" onSubmit={editContent} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box component="form" onSubmit={updateContent} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <TextField
               multiline
               rows={5}

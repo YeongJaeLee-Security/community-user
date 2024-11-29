@@ -1,10 +1,12 @@
-import Link from "next/link";
-
 import Feed from "@/components/feed";
+import { Typography } from "@mui/material";
 
 export default function Profile({ user }) {
   return (
     <>
+      <Typography variant="body1">
+        u/{user.username}
+      </Typography>
       <Feed posts={[...user.posts].reverse()} />
     </>
   );

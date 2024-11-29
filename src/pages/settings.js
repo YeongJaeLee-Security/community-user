@@ -1,49 +1,119 @@
 import Head from "next/head";
 
-import Feed from "@/components/feed";
-import { Box, Button } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useAuth } from "@/context/authcontext";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+import validatePassword from "@/lib/validatepassword";
+
 export default function Settings() {
-  const [ authState, setAuthState ] = useState(null);
+  const [ auth, setAuth ] = useState(null);
 
+  const [email, setEmail] = useState("");
   const [isEditEmail, setIsEditEmail] = useState(false);
-  const [ emailState, setEmailState ] = useState(null);
 
+  const [password, setPassword] = useState("");
+  const [isEditPassword, setIsEditPassword] = useState(false);
+
+  const [username, setUsername] = useState("");
   const [isEditUsername, setIsEditUsername] = useState(false);
-  const [ usernameState, setUsernameState ] = useState(null);
 
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, logOut } = useAuth();
   const router = useRouter();
+
+  const url = `http://localhost:8000/auth/settings`;
 
   const fetchAuth = useCallback(
     async () => {
       if (!isLoggedIn) {
         router.push("/login");
       }
-      const response = await fetch(
-        `http://localhost:8000/auth/settings`
-      );
+      const response = await fetch(url,
+      { credentials: "include"});
       const auth = await response.json();
-      setAuthState(auth);
-      setEmailState(auth.email);
-      setUsernameState(auth.username);
-    }, [isLoggedIn, router]
+      setAuth(auth);
+      setEmail(auth.email);
+      setUsername(auth.username);
+    }, [isLoggedIn, router, url]
   )
 
   useEffect(() => {
     fetchAuth();
   }, [fetchAuth]);
 
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  const options = {
+    headers,
+    credentials: "include",
+  };
+
   function enterEditEmail() {
     setIsEditEmail(true);
   }
 
   function cancelEditEmail() {
-    setContent(authState.email);
+    setEmail(auth.email);
     setIsEditEmail(false);
+  }
+
+  async function updateEmail(e) {
+    e.preventDefault();
+
+    const updated = {
+      email,
+    };
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        method: "PATCH",
+        body: JSON.stringify(updated),
+      });
+      const data = await response.json();
+      setIsEditEmail(false);
+      setAuth(data);
+    } catch (error) {
+    }
+  }
+
+  function enterEditPassword() {
+    setIsEditPassword(true);
+  }
+
+  function cancelEditPassword() {
+    setPassword("");
+    setIsEditPassword(false);
+  }
+
+  async function updatePassword(e) {
+    e.preventDefault();
+    if (!validatePassword(password)) {
+      alert('비밀번호는 최소 8자 이상이며, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.');
+      setIsEditPassword(false);
+      setPassword("");
+      return;
+    }
+
+    const updated = {
+      password,
+    };
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        method: "PATCH",
+        body: JSON.stringify(updated),
+      });
+      const data = await response.json();
+      setAuth(data);
+    } catch (error) {
+    } finally {
+      setIsEditPassword(false);
+      setPassword("");
+    }
   }
 
   function enterEditUsername() {
@@ -51,8 +121,37 @@ export default function Settings() {
   }
 
   function cancelEditUsername() {
-    setUsernameState(authState.username);
+    setUsername(auth.username);
     setIsEditUsername(false);
+  }
+
+  async function updateUsername(e) {
+    e.preventDefault();
+
+    const updated = {
+      username,
+    };
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        method: "PATCH",
+        body: JSON.stringify(updated),
+      });
+      const data = await response.json();
+      setIsEditUsername(false);
+      setAuth(data);
+    } catch (error) {
+    }
+  }
+
+  async function deleteAccount() {
+    const response = await fetch(url, {
+      ...options,
+      method: "DELETE",
+    });
+    logOut();
+    router.push("/");
   }
 
   return (
@@ -64,7 +163,122 @@ export default function Settings() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Box>
-        <Button>Delete account</Button>
+        <Box>
+          {isEditEmail ? (
+            <Box component="form" onSubmit={updateEmail} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <TextField
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Edit your email..."
+                // variant="outlined"
+                // fullWidth
+                required
+              />
+              <Box sx={{ display: 'flex' }}>
+                <Button variant="contained" color="primary" type="submit" sx={{ bgcolor: 'primary.main' }}>
+                  Save
+                </Button>
+                <Button variant="outlined" color="secondary" onClick={cancelEditEmail}>
+                  Cancel
+                </Button>
+              </Box>
+            </Box>
+          ) : (
+            <Box>
+              <Typography variant="body1">
+                {email}
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={enterEditEmail}
+                sx={{ bgcolor: 'primary.main' }}
+              >
+                Edit
+              </Button>
+            </Box>
+          )}
+        </Box>
+        <Box>
+          {isEditPassword ? (
+            <Box component="form" onSubmit={updatePassword} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <TextField
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                // variant="outlined"
+                // fullWidth
+                required
+              />
+              <Box sx={{ display: 'flex' }}>
+                <Button variant="contained" color="primary" type="submit" sx={{ bgcolor: 'primary.main' }}>
+                  Save
+                </Button>
+                <Button variant="outlined" color="secondary" onClick={cancelEditPassword}>
+                  Cancel
+                </Button>
+              </Box>
+            </Box>
+            ) : (
+            <Box>
+              <Typography variant="body1">
+                password
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={enterEditPassword}
+                sx={{ bgcolor: 'primary.main' }}
+              >
+                Edit
+              </Button>
+            </Box>
+          )}
+        </Box>
+        <Box>
+          {isEditUsername ? (
+            <Box component="form" onSubmit={updateUsername} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <TextField
+                label="Username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Edit your Username..."
+                // variant="outlined"
+                // fullWidth
+                required
+              />
+              <Box sx={{ display: 'flex' }}>
+                <Button variant="contained" color="primary" type="submit" sx={{ bgcolor: 'primary.main' }}>
+                  Save
+                </Button>
+                <Button variant="outlined" color="secondary" onClick={cancelEditUsername}>
+                  Cancel
+                </Button>
+              </Box>
+            </Box>
+          ) : (
+            <Box>
+              <Typography variant="body1">
+                {username}
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={enterEditUsername}
+                sx={{ bgcolor: 'primary.main' }}
+              >
+                Edit
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Box>
+      <Box>
+        <Button onClick={deleteAccount}>Delete account</Button>
       </Box>
     </>
   );
