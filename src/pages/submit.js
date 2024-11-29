@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useCallback, useEffect } from "react";
 import Head from "next/head";
 import Editor from "@/components/editor/editor";
 import EditorTitle from "@/components/editor/editortitle";
@@ -6,10 +6,26 @@ import EditorContent from "@/components/editor/editorcontent";
 import { useRouter } from "next/router";
 import { Box, TextField, Button } from "@mui/material";
 
+import { useAuth } from "@/context/authcontext";
+
 export default function Page() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const router = useRouter();
+
+  const { isLoggedIn } = useAuth();
+
+  const fetchAuth = useCallback(
+    async () => {
+      if (!isLoggedIn) {
+        router.push("/login");
+      }
+    }, [isLoggedIn, router]
+  )
+
+  useEffect(() => {
+    fetchAuth();
+  }, [fetchAuth]);
 
   async function createPost(e) {
     e.preventDefault();

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import { Box, Button, Paper, Typography, TextField } from '@mui/material';
 import { useAuth } from "@/context/authcontext";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Post({ post }) {
   const [isEdit, setIsEdit] = useState(false);
@@ -10,6 +11,7 @@ export default function Post({ post }) {
   const [content, setContent] = useState(post.content);
   const [reportContent, setReportContent] = useState(""); // 신고 내용
   const { isLoggedIn, authId } = useAuth();
+  const [ prevContent, setPrevContent ] = useState(post.content);
 
   const isAuthor = post.author === authId;
   const router = useRouter();
@@ -19,7 +21,7 @@ export default function Post({ post }) {
   }
 
   function cancelEdit() {
-    setContent(post.content);
+    setContent(prevContent);
     setIsEdit(false);
   }
 
@@ -47,6 +49,7 @@ export default function Post({ post }) {
       body: JSON.stringify(updated),
     });
     setIsEdit(false);
+    setPrevContent(content);
   }
 
   async function deletePost() {
@@ -97,7 +100,11 @@ export default function Post({ post }) {
           {post.title}
         </Typography>
         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
-          작성자: {post.user.username} | 날짜: {post.date}
+          {/* <Link href={`http://localhost:3000/profile/${post.user.username}`}> */}
+          <Link href={`http://localhost:3000/profile/${post.user.id}`}>
+          작성자: {post.user.username}
+          </Link>
+          | 날짜: {post.date}
         </Typography>
         {isEdit ? (
           <Box component="form" onSubmit={editContent} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
