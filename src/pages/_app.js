@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import Layout from "../components/layout";
 import { AuthProvider } from "@/context/authcontext";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { useState } from "react";
 
 const Theme = createTheme({
   palette: {
@@ -25,12 +26,14 @@ const Theme = createTheme({
 });
 
 export default function App({ Component, pageProps }) {
+  const [searchQuery, setSearchQuery] = useState(''); 
+
   return (
     <AuthProvider>
     <ThemeProvider theme={Theme}>
       <CssBaseline />
-        <Layout>
-          <Component {...pageProps} />
+        <Layout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
+          <Component {...pageProps} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </Layout>
     </ThemeProvider>
     </AuthProvider>

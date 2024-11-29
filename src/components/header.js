@@ -5,9 +5,15 @@ import { useRouter } from "next/router";
 import AuthButton from "./authbutton";
 import { useAuth } from "@/context/authcontext";
 
-export default function Header() {
+export default function Header({ searchQuery, setSearchQuery }) {
   const { isLoggedIn } = useAuth();
   const router = useRouter();
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);  // Layout에서 전달된 setSearchQuery 호출
+  };
+
+  console.log(searchQuery)
 
   return (
     <AppBar position="static" sx={{ bgcolor: "#1a1a1b", color: "#FFFFFF" }}>
@@ -39,6 +45,8 @@ export default function Header() {
               placeholder="Search..."
               inputProps={{ "aria-label": "search" }}
               sx={{ color: "#FFFFFF", width: "100%" }}
+              value={searchQuery}  // 검색어 상태 값
+              onChange={handleSearchChange}
             />
           </Box>
         )}
