@@ -151,6 +151,9 @@ export default function Post({ post }) {
             {typeof content === 'string' ? content : JSON.stringify(content)}
           </Typography>
         )}
+        {post.image_path && (
+          <Box component="img" sx={{width: '750px', height: '650px', objectFit: 'cover'}} src={`http://localhost:8000/${post.image_path}`}></Box>
+        )}
       </Paper>
 
       {/* 버튼들 */}
