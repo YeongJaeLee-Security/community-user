@@ -28,6 +28,7 @@ export default function Layout({ children, searchQuery, setSearchQuery }) {
           }
         } catch (error) {
           console.error('인증 또는 Ban 상태 확인 중 오류:', error);
+          router.replace('/404')
         }
       }
     };

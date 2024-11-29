@@ -10,7 +10,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.push('/'); // 로그인 상태면 /로 리다이렉트
+      router.replace('/'); // 로그인 상태면 /로 리다이렉트
     }
   }, [isLoggedIn, router]);
 
