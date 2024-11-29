@@ -48,6 +48,7 @@ export default function Page() {
         throw new Error("Failed to submit data. Please try again");
       }
 
+      alert("게시글이 업로드되었습니다.");
       router.push("/");
 
     } catch (error) {
