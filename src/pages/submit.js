@@ -30,17 +30,24 @@ export default function Page() {
 
   async function createPost(e) {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", title); 
-    formData.append("content", content);
+
+    const post = {
+      title,
+      content,
+      author: undefined,
+      date: new Date(),
+    };
     if (imageFile) {
-      formData.append("file", imageFile);
+      post["file"] = imageFile;
     };
 
     try {
       const response = await fetch("http://localhost:8000/submit", {
         method: "POST",
-        body: formData,
+        body: JSON.stringify(post),
+        headers: {
+          'Content-Type': 'application/json',
+        },
         credentials: "include",
       });
 
