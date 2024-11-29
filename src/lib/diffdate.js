@@ -5,27 +5,23 @@ export default function diffDate( date ) {
     const day = 24*hour;
     const year = 365*day
 
-    const diff = new Date() - new Date(date);
+    const diff = new Date() - new Date(date) - 9*hour;
 
     if (diff > year) {
-        return `${Math.trunc(diff/year)}y`;
+        return `${Math.trunc(diff/year)}y ago`;
     }
 
     if (diff > day) {
-        return `${Math.trunc(diff/day)}d`;
+        return `${Math.trunc(diff/day)}d ago`;
     }
 
     if (diff > hour) {
-        return `${Math.trunc(diff/hour)}h`;
+        return `${Math.trunc(diff/hour)}h ago`;
     }
 
     if (diff > minute) {
-        return `${Math.trunc(diff/minute)}m`;
+        return `${Math.trunc(diff/minute)}m ago`;
     }
 
-    if (diff > second) {
-        return `${Math.trunc(diff/second)}s`;
-    }
-
-    return '0s';
+    return '1m ago';
 }

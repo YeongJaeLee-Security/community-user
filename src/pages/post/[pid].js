@@ -136,17 +136,16 @@ export default function Post({ post }) {
           {post.title}
         </Typography>
         <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 2 }}>
-          작성자:
+          작성자:<span> </span>
           <Link
             component="button"
             variant="body2"
             onClick={() => router.push(`/profile/${post.user.id}`)}
-            // href={`http://localhost:3000/profile/${post.user.id}`}
           >
-          { post.user.username}
+          {post.user.username}
           </Link>
-          | 날짜: {post.date}
-          {diffDate(post.date)}
+          {/* | 날짜: {post.date} */}
+          <span> | </span>{diffDate(post.date)}
         </Typography>
         {isEdit ? (
           <Box component="form" onSubmit={updateContent} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
