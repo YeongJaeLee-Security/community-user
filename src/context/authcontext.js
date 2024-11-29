@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   }, [checkLoginStatus]);
 
   const logIn = () => {
-    // checkLoginStatus();
+    checkLoginStatus();
   };
 
   const logOut = () => {
